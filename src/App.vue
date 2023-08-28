@@ -5,13 +5,8 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
   methods: {
     async install() {
       console.log('👍', 'butInstall-clicked');
