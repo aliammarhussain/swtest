@@ -8,7 +8,6 @@
 
 <script>
 const divInstall = document.getElementById("installContainer");
-const butInstall = document.getElementById("butInstall");
 
 export default {
   name: 'App',
