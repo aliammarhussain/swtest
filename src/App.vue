@@ -1,18 +1,42 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <div id="installContainer">
+    <img alt="Vue logo" src="./assets/logo.png">
 
-  <button @click.prevent="install">Install App</button>
+    <button id="butInstall" @click.prevent="install">Install App</button>
+  </div>
 </template>
 
 <script>
+const divInstall = document.getElementById("installContainer");
+const butInstall = document.getElementById("butInstall");
+
 export default {
   name: 'App',
+  mounted() {
+    this.init()
+  },
   methods: {
+    init() {
+      window.addEventListener('beforeinstallprompt', (event) => {
+        // Prevent the mini-infobar from appearing on mobile.
+        event.preventDefault();
+        console.log('👍', 'beforeinstallprompt', event);
+        // Stash the event so it can be triggered later.
+        window.deferredPrompt = event;
+        // Remove the 'hidden' class from the install button container.
+        divInstall.classList.toggle('hidden', false);
+      });
+
+      window.addEventListener('appinstalled', (event) => {
+        console.log('👍', 'appinstalled', event);
+        // Clear the deferredPrompt so it can be garbage collected
+        window.deferredPrompt = null;
+      });
+    },
     async install() {
       console.log('👍', 'butInstall-clicked');
       const promptEvent = window.deferredPrompt;
       if (!promptEvent) {
-        alert('Already Downloaded')
         // The deferred prompt isn't available.
         return;
       }
@@ -25,9 +49,8 @@ export default {
       // prompt() can only be called once.
       window.deferredPrompt = null;
       // Hide the install button.
-      // divInstall.classList.toggle('hidden', true);
-    
-    },
+      divInstall.classList.toggle('hidden', true);
+    }
   }
 }
 </script>
